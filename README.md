@@ -16,7 +16,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-[![Build Status](https://magnum.travis-ci.com/intelsdi-x/snap-plugin-collector-osv.svg?token=2ujsxEpZo1issFyVWX29&branch=master)](https://magnum.travis-ci.com/intelsdi-x/snap-plugin-collector-osv )
+[![Build Status](https://api.travis-ci.com/intelsdi-x/snap-plugin-collector-osv.svg?token=FhmCtm9AdqhSXoSbqxo2&branch=master)](https://travis-ci.com/intelsdi-x/snap-plugin-collector-osv )
 # Plugin - Snap Osv Collector
 
 1. [Getting Started](#getting-started)
