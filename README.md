@@ -17,7 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 [![Build Status](https://api.travis-ci.com/intelsdi-x/snap-plugin-collector-osv.svg?token=FhmCtm9AdqhSXoSbqxo2&branch=master)](https://travis-ci.com/intelsdi-x/snap-plugin-collector-osv )
-# Plugin - Snap Osv Collector
+# Plugin - snap osv collector
 
 1. [Getting Started](#getting-started)
 2. [Documentation](#documentation)
@@ -390,7 +390,7 @@ Using osv plugin you can collect following metrics from osv api:
 
 
 ### Community Support
-This repository is one of **many** plugins in the **Snap Framework**: a powerful telemetry agent framework.
+This repository is one of **many** plugins in the **snap framework**: a powerful telemetry agent framework.
 The full project is at https://github.com/intelsdi-x/snap.
 
 ### Roadmap

@@ -1,4 +1,4 @@
-# Plugin - Snap Osv Collector
+# Plugin - snap osv collector
 
 1. [Contributing Code](#contributing-code)
 1. [Contributing Examples](#contributing-examples)
