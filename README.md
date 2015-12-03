@@ -1,49 +1,36 @@
-<!--
-http://www.apache.org/licenses/LICENSE-2.0.txt
-
-
-Copyright 2015 Intel Corporation
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
--->
-[![Build Status](https://api.travis-ci.com/intelsdi-x/snap-plugin-collector-osv.svg?token=FhmCtm9AdqhSXoSbqxo2&branch=master)](https://travis-ci.com/intelsdi-x/snap-plugin-collector-osv )
-# Plugin - snap osv collector
+[![Build Status](https://api.travis-ci.org/intelsdi-x/snap-plugin-collector-osv.svg)](https://travis-ci.org/intelsdi-x/snap-plugin-collector-osv )
+# snap collector plugin - osv
 
 1. [Getting Started](#getting-started)
+  * [System Requirements](#system-requirements)
+  * [Installation](#installation)
+  * [Configuration and Usage](configuration-and-usage)
 2. [Documentation](#documentation)
+  * [Collected Metrics](#collected-metrics)
   * [Examples](#examples)
   * [Roadmap](#roadmap)
-3.  [Community Support](#community-support)
+3. [Community Support](#community-support)
 4. [Contributing](#contributing)
-5. [License and Authors](#license-and-authors)
-6. [Thank You](#thank-you)
+5. [License](#license)
+6. [Acknowledgements](#acknowledgements)
 
 ## Getting Started
 
+### System Requirements
 
-### Run osv host with rest api support. For dev build of osv please run with external network support
+#### OSv host with rest api support. For dev builds please run OSv with external network support
 
 ```
 sudo ./scripts/run.py -n -v --api
 ```
 
 
-### Compile plugin
+#### Compile plugin
 ```
 make
 ```
 
-## Documentation
+### Documentation
 
 ### Examples
 Example running osv, passthru processor, and writing data to a file.
@@ -153,241 +140,210 @@ See file output (this is just part of the file):
 |/osv/trace/wait/waitqueue_wake_one|1319942|2015-11-25 15:36:04.226810341 +0000 UTC|192.168.122.89|
 
 
-### Exposed metrics
-Using osv plugin you can collect following metrics from osv api:
+### Collected Metrics
+This plugin has the ability to gather the following metrics:
 
-* cpu
-```
-"cputime"
-```
-* memory
-```
-"free"
-"total" 
-```
-* virtio_counters 
-```
-"virtio_wait_for_queue"
-"virtio_enable_interrupts"
-"virtio_disable_interrupts",
-"virtio_kicked_event_idx"
-"virtio_add_buf"
-"virtio_net_rx_packet"
-"virtio_net_rx_wake"
-"virtio_net_fill_rx_ring",
-"virtio_net_fill_rx_ring_added"
-"virtio_net_tx_packet"
-"virtio_net_tx_failed_add_buf"
-"virtio_net_tx_no_space_calling_gc",
-"virtio_net_tx_packet_size"
-"virtio_net_tx_xmit_one_failed_to_post"
-"virtio_blk_read_config_capacity",
-"virtio_blk_read_config_size_max"
-"virtio_blk_read_config_seg_max"
-"virtio_blk_read_config_geometry",
-"virtio_blk_read_config_blk_size"
-"virtio_blk_read_config_topology"
-"virtio_blk_read_config_wce",
-"virtio_blk_read_config_ro"
-"virtio_blk_make_request_seg_max"
-"virtio_blk_make_request_readonly",
-"virtio_blk_wake"
-"virtio_blk_strategy"
-"virtio_blk_req_ok"
-"virtio_blk_req_unsupp"
-"virtio_blk_req_err"
-```
-* net_counters:
-```
-"net_packet_in"
-"net_packet_out"
-"net_packet_handling"
-```
-* tcp_counters -
-```
-"tcp_state"
-"tcp_input_ack"
-"tcp_output"
-"tcp_output_error",
-"tcp_output_resched_start"
-"tcp_output_resched_end"
-"tcp_output_start"
-"tcp_output_ret",
-"tcp_output_just_ret"
-"tcp_output_cant_take_inp_lock"
-"tcp_timer_tso_flush",
-"tcp_timer_tso_flush_ret"
-"tcp_timer_tso_flush_err"
-```
-
-* memory_counters
-```
-"memory_malloc"
-"memory_malloc_mempool"
-"memory_malloc_large"
-"memory_malloc_page",
-"memory_free"
-"memory_realloc"
-"memory_page_alloc"
-"memory_page_free"
-"memory_huge_failure"
-"memory_reclaim",
-"memory_wait"
-"memory_mmap"
-"memory_mmap_err"
-"memory_mmap_ret"
-"memory_munmap"
-"memory_munmap_err"
-"memory_munmap_ret"
-```
-* callout_counters 
-```
-"callout_init"
-"callout_reset"
-"callout_stop_wait"
-"callout_stop",
-"callout_thread_waiting"
-"callout_thread_dispatching"
-```
-* wait_counters
-```
-"waitqueue_wait"
-"waitqueue_wake_one"
-"waitqueue_wake_all"
-```
-* async_counters
-```
-"async_timer_task_create"
-"async_timer_task_destroy"
-"async_timer_task_reschedule",
-"async_timer_task_cancel"
-"async_timer_task_shutdown"
-"async_timer_task_fire"
-"async_timer_task_misfire",
-"async_timer_task_insert"
-"async_timer_task_remove"
-"async_worker_started"
-"async_worker_timer_fire",
-"async_worker_timer_fire_ret"
-"async_worker_fire"
-"async_worker_fire_ret"
-```
-* vfs_counters 
-```
-"vfs_open"
-"vfs_open_ret"
-"vfs_open_err"
-"vfs_close",
-"vfs_close_ret"
-"vfs_close_err"
-"vfs_mknod"
-"vfs_mknod_ret"
-"vfs_mknod_err"
-"vfs_lseek",
-"vfs_lseek_ret"
-"vfs_lseek_err"
-"vfs_pread"
-"vfs_pread_ret"
-"vfs_pread_err"
-"vfs_pwrite",
-"vfs_pwrite_ret"
-"vfs_pwrite_err"
-"vfs_pwritev"
-"vfs_pwritev_ret"
-"vfs_pwritev_err"
-"vfs_ioctl",
-"vfs_ioctl_ret"
-"vfs_ioctl_err"
-"vfs_fsync"
-"vfs_fsync_ret"
-"vfs_fsync_err"
-"vfs_fstat",
-"vfs_fstat_ret"
-"vfs_fstat_err"
-"vfs_readdir"
-"vfs_readdir_ret"
-"vfs_readdir_err",
-"vfs_mkdir"
-"vfs_mkdir_ret"
-"vfs_mkdir_err"
-"vfs_rmdir"
-"vfs_rmdir_ret"
-"vfs_rmdir_err",
-"vfs_rename"
-"vfs_rename_ret"
-"vfs_rename_err"
-"vfs_chdir"
-"vfs_chdir_ret",
-"vfs_chdir_err"
-"vfs_fchdir"
-"vfs_fchdir_ret"
-"vfs_fchdir_err"
-"vfs_link",
-"vfs_link_ret"
-"vfs_link_err"
-"vfs_symlink"
-"vfs_symlink_ret"
-"vfs_symlink_err",
-"vfs_unlink"
-"vfs_unlink_ret"
-"vfs_unlink_err"
-"vfs_stat"
-"vfs_stat_ret"
-"vfs_stat_err",
-"vfs_lstat"
-"vfs_lstat_ret"
-"vfs_lstat_err"
-"vfs_statfs"
-"vfs_statfs_ret"
-"vfs_statfs_err",
-"vfs_fstatfs"
-"vfs_fstatfs_ret"
-"vfs_fstatfs_err"
-"vfs_getcwd"
-"vfs_getcwd_ret"
-"vfs_getcwd_err",
-"vfs_dup"
-"vfs_dup_ret"
-"vfs_dup_err"
-"vfs_dup3"
-"vfs_dup3_ret"
-"vfs_dup3_err"
-"vfs_fcntl",
-"vfs_fcntl_ret"
-"vfs_fcntl_err"
-"vfs_access"
-"vfs_access_ret"
-"vfs_access_err"
-"vfs_isatty",
-"vfs_isatty_ret"
-"vfs_isatty_err"
-"vfs_truncate"
-"vfs_truncate_ret"
-"vfs_truncate_err",
-"vfs_ftruncate"
-"vfs_ftruncate_ret"
-"vfs_ftruncate_err"
-"vfs_fallocate"
-"vfs_fallocate_ret",
-"vfs_fallocate_err"
-"vfs_utimes"
-"vfs_utimes_ret"
-"vfs_utimes_err"
-"vfs_utimensat",
-"vfs_utimensat_ret"
-"vfs_utimensat_err"
-"vfs_futimens"
-"vfs_futimens_ret"
-"vfs_futimens_err",
-"vfs_chmod"
-"vfs_chmod_ret"
-"vfs_chmod_err"
-"vfs_fchmod"
-"vfs_fchmod_ret"
-"vfs_fchown",
-"vfs_fchown_ret"
-```
-
+Namespace | Data Type | Description
+----------|-----------|-----------------------
+/osv/cpu/cputime| uint64| cputime
+/osv/memory/free| uint64| free memory
+/osv/memory/total| uint64| total memory
+/osv/trace/virtio/virtio_wait_for_queue| uint64|
+/osv/trace/virtio/virtio_enable_interrupts| uint64|
+/osv/trace/virtio/virtio_disable_interrupts| uint64|
+/osv/trace/virtio/virtio_kicked_event_idx| uint64|
+/osv/trace/virtio/virtio_add_buf| uint64|
+/osv/trace/virtio/virtio_net_rx_packet| uint64|
+/osv/trace/virtio/virtio_net_rx_wake| uint64|
+/osv/trace/virtio/virtio_net_fill_rx_ring| uint64|
+/osv/trace/virtio/virtio_net_fill_rx_ring_added| uint64|
+/osv/trace/virtio/virtio_net_tx_packet| uint64|
+/osv/trace/virtio/virtio_net_tx_failed_add_buf| uint64|
+/osv/trace/virtio/virtio_net_tx_no_space_calling_gc| uint64|
+/osv/trace/virtio/virtio_net_tx_packet_size| uint64|
+/osv/trace/virtio/virtio_net_tx_xmit_one_failed_to_post| uint64|
+/osv/trace/virtio/virtio_blk_read_config_capacity| uint64|
+/osv/trace/virtio/virtio_blk_read_config_size_max| uint64|
+/osv/trace/virtio/virtio_blk_read_config_seg_max| uint64|
+/osv/trace/virtio/virtio_blk_read_config_geometry| uint64|
+/osv/trace/virtio/virtio_blk_read_config_blk_siz| uint64|
+/osv/trace/virtio/virtio_blk_read_config_topology| uint64|
+/osv/trace/virtio/virtio_blk_read_config_wce| uint64|
+/osv/trace/virtio/virtio_blk_read_config_ro| uint64|
+/osv/trace/virtio/virtio_blk_make_request_seg_max| uint64|
+/osv/trace/virtio/virtio_blk_make_request_readonly| uint64|
+/osv/trace/virtio/virtio_blk_wake| uint64|
+/osv/trace/virtio/virtio_blk_strategy| uint64|
+/osv/trace/virtio/virtio_blk_req_ok| uint64|
+/osv/trace/virtio/virtio_blk_req_unsupp| uint64|
+/osv/trace/virtio/virtio_blk_req_err| uint64|
+/osv/trace/net/net_packet_in| uint64|
+/osv/trace/net/net_packet_out| uint64|
+/osv/trace/net/net_packet_handling| uint64|
+/osv/trace/tcp/tcp_state| uint64|
+/osv/trace/tcp/tcp_input_ack| uint64|
+/osv/trace/tcp/tcp_output| uint64|
+/osv/trace/tcp/tcp_output_error| uint64|
+/osv/trace/tcp/tcp_output_resched_start| uint64|
+/osv/trace/tcp/tcp_output_resched_end| uint64|
+/osv/trace/tcp/tcp_output_start| uint64|
+/osv/trace/tcp/tcp_output_ret| uint64|
+/osv/trace/tcp/tcp_output_just_ret| uint64|
+/osv/trace/tcp/tcp_output_cant_take_inp_lock| uint64|
+/osv/trace/tcp/tcp_timer_tso_flush| uint64|
+/osv/trace/tcp/tcp_timer_tso_flush_ret| uint64|
+/osv/trace/tcp/tcp_timer_tso_flush_err| uint64|
+/osv/trace/memory/memory_malloc| uint64|
+/osv/trace/memory/memory_malloc_mempool| uint64|
+/osv/trace/memory/memory_malloc_large| uint64|
+/osv/trace/memory/memory_malloc_page| uint64|
+/osv/trace/memory/memory_free| uint64|
+/osv/trace/memory/memory_realloc| uint64|
+/osv/trace/memory/memory_page_alloc| uint64|
+/osv/trace/memory/memory_page_free| uint64|
+/osv/trace/memory/memory_huge_failure| uint64|
+/osv/trace/memory/memory_reclaim| uint64|
+/osv/trace/memory/memory_wait| uint64|
+/osv/trace/memory/memory_mmap| uint64|
+/osv/trace/memory/memory_mmap_err| uint64|
+/osv/trace/memory/memory_mmap_ret| uint64|
+/osv/trace/memory/memory_munmap| uint64|
+/osv/trace/memory/memory_munmap_err| uint64|
+/osv/trace/memory/memory_munmap_ret| uint64|
+/osv/trace/callout/callout_init| uint64|
+/osv/trace/callout/callout_reset| uint64|
+/osv/trace/callout/callout_stop_wait| uint64|
+/osv/trace/callout/callout_stop| uint64|
+/osv/trace/callout/callout_thread_waiting| uint64|
+/osv/trace/callout/callout_thread_dispatching| uint64|
+/osv/trace/wait/waitqueue_wait| uint64|
+/osv/trace/wait/waitqueue_wake_one| uint64|
+/osv/trace/wait/waitqueue_wake_all| uint64|
+/osv/trace/anync/async_timer_task_create| uint64|
+/osv/trace/anync/async_timer_task_destroy| uint64|
+/osv/trace/anync/async_timer_task_reschedule| uint64|
+/osv/trace/anync/async_timer_task_cancel| uint64|
+/osv/trace/anync/async_timer_task_shutdown| uint64|
+/osv/trace/anync/async_timer_task_fire| uint64|
+/osv/trace/anync/async_timer_task_misfire| uint64|
+/osv/trace/anync/async_timer_task_insert| uint64|
+/osv/trace/anync/async_timer_task_remove| uint64|
+/osv/trace/anync/async_worker_started| uint64|
+/osv/trace/anync/async_worker_timer_fire| uint64|
+/osv/trace/anync/async_worker_timer_fire_ret| uint64|
+/osv/trace/anync/async_worker_fire| uint64|
+/osv/trace/anync/async_worker_fire_ret| uint64|
+/osv/trace/vfs/vfs_open| uint64|
+/osv/trace/vfs/vfs_open_ret| uint64|
+/osv/trace/vfs/vfs_open_err| uint64|
+/osv/trace/vfs/vfs_close| uint64|
+/osv/trace/vfs/vfs_close_ret| uint64|
+/osv/trace/vfs/vfs_close_err| uint64|
+/osv/trace/vfs/vfs_mknod| uint64|
+/osv/trace/vfs/vfs_mknod_ret| uint64|
+/osv/trace/vfs/vfs_mknod_err| uint64|
+/osv/trace/vfs/vfs_lseek| uint64|
+/osv/trace/vfs/vfs_lseek_ret| uint64|
+/osv/trace/vfs/vfs_lseek_err| uint64|
+/osv/trace/vfs/vfs_pread| uint64|
+/osv/trace/vfs/vfs_pread_ret| uint64|
+/osv/trace/vfs/vfs_pread_err| uint64|
+/osv/trace/vfs/vfs_pwrite| uint64|
+/osv/trace/vfs/vfs_pwrite_ret| uint64|
+/osv/trace/vfs/vfs_pwrite_err| uint64|
+/osv/trace/vfs/vfs_pwritev| uint64|
+/osv/trace/vfs/vfs_pwritev_ret| uint64|
+/osv/trace/vfs/vfs_pwritev_err| uint64|
+/osv/trace/vfs/vfs_ioctl| uint64|
+/osv/trace/vfs/vfs_ioctl_ret| uint64|
+/osv/trace/vfs/vfs_ioctl_err| uint64|
+/osv/trace/vfs/vfs_fsync| uint64|
+/osv/trace/vfs/vfs_fsync_ret| uint64|
+/osv/trace/vfs/vfs_fsync_err| uint64|
+/osv/trace/vfs/vfs_fstat| uint64|
+/osv/trace/vfs/vfs_fstat_ret| uint64|
+/osv/trace/vfs/vfs_fstat_err| uint64|
+/osv/trace/vfs/vfs_readdir| uint64|
+/osv/trace/vfs/vfs_readdir_ret| uint64|
+/osv/trace/vfs/vfs_readdir_err| uint64|
+/osv/trace/vfs/vfs_mkdir| uint64|
+/osv/trace/vfs/vfs_mkdir_ret| uint64|
+/osv/trace/vfs/vfs_mkdir_err| uint64|
+/osv/trace/vfs/vfs_rmdir| uint64|
+/osv/trace/vfs/vfs_rmdir_ret| uint64|
+/osv/trace/vfs/vfs_rmdir_err| uint64|
+/osv/trace/vfs/vfs_rename| uint64|
+/osv/trace/vfs/vfs_rename_ret| uint64|
+/osv/trace/vfs/vfs_rename_err| uint64|
+/osv/trace/vfs/vfs_chdir| uint64|
+/osv/trace/vfs/vfs_chdir_ret| uint64|
+/osv/trace/vfs/vfs_fchdir| uint64|
+/osv/trace/vfs/vfs_fchdir_ret| uint64|
+/osv/trace/vfs/vfs_fchdir_err| uint64|
+/osv/trace/vfs/vfs_link| uint64|
+/osv/trace/vfs/vfs_link_ret| uint64|
+/osv/trace/vfs/vfs_link_err| uint64|
+/osv/trace/vfs/vfs_symlink| uint64|
+/osv/trace/vfs/vfs_symlink_ret| uint64|
+/osv/trace/vfs/vfs_symlink_err| uint64|
+/osv/trace/vfs/vfs_unlink| uint64|
+/osv/trace/vfs/vfs_unlink_ret| uint64|
+/osv/trace/vfs/vfs_unlink_err| uint64|
+/osv/trace/vfs/vfs_stat| uint64|
+/osv/trace/vfs/vfs_stat_ret| uint64|
+/osv/trace/vfs/vfs_stat_err| uint64|
+/osv/trace/vfs/vfs_lstat| uint64|
+/osv/trace/vfs/vfs_lstat_ret| uint64|
+/osv/trace/vfs/vfs_lstat_err| uint64|
+/osv/trace/vfs/vfs_statfs| uint64|
+/osv/trace/vfs/vfs_statfs_ret| uint64|
+/osv/trace/vfs/vfs_statfs_err| uint64|
+/osv/trace/vfs/vfs_fstatfs| uint64|
+/osv/trace/vfs/vfs_fstatfs_ret| uint64|
+/osv/trace/vfs/vfs_fstatfs_err| uint64|
+/osv/trace/vfs/vfs_getcwd| uint64|
+/osv/trace/vfs/vfs_getcwd_ret| uint64|
+/osv/trace/vfs/vfs_getcwd_err| uint64|
+/osv/trace/vfs/vfs_dup| uint64|
+/osv/trace/vfs/vfs_dup_ret| uint64|
+/osv/trace/vfs/vfs_dup_err| uint64|
+/osv/trace/vfs/vfs_dup3| uint64|
+/osv/trace/vfs/vfs_dup3_ret| uint64|
+/osv/trace/vfs/vfs_dup3_err| uint64|
+/osv/trace/vfs/vfs_fcntl| uint64|
+/osv/trace/vfs/vfs_fcntl_ret| uint64|
+/osv/trace/vfs/vfs_fcntl_err| uint64|
+/osv/trace/vfs/vfs_access| uint64|
+/osv/trace/vfs/vfs_access_ret| uint64|
+/osv/trace/vfs/vfs_access_err| uint64|
+/osv/trace/vfs/vfs_isatty| uint64|
+/osv/trace/vfs/vfs_isatty_ret| uint64|
+/osv/trace/vfs/vfs_isatty_err| uint64|
+/osv/trace/vfs/vfs_truncate| uint64|
+/osv/trace/vfs/vfs_truncate_ret| uint64|
+/osv/trace/vfs/vfs_truncate_err| uint64|
+/osv/trace/vfs/vfs_ftruncate| uint64|
+/osv/trace/vfs/vfs_ftruncate_ret| uint64|
+/osv/trace/vfs/vfs_ftruncate_err| uint64|
+/osv/trace/vfs/vfs_fallocate| uint64|
+/osv/trace/vfs/vfs_fallocate_ret| uint64|
+/osv/trace/vfs/vfs_fallocate_err| uint64|
+/osv/trace/vfs/vfs_utimes| uint64|
+/osv/trace/vfs/vfs_utimes_ret| uint64|
+/osv/trace/vfs/vfs_utimes_err| uint64|
+/osv/trace/vfs/vfs_utimensat| uint64|
+/osv/trace/vfs/vfs_utimensat_ret| uint64|
+/osv/trace/vfs/vfs_utimensat_err| uint64|
+/osv/trace/vfs/vfs_futimens| uint64|
+/osv/trace/vfs/vfs_futimens_ret| uint64|
+/osv/trace/vfs/vfs_futimens_err| uint64|
+/osv/trace/vfs/vfs_chmod| uint64|
+/osv/trace/vfs/vfs_chmod_ret| uint64|
+/osv/trace/vfs/vfs_chmod_err| uint64|
+/osv/trace/vfs/vfs_fchmod| uint64|
+/osv/trace/vfs/vfs_fchmod_ret| uint64|
+/osv/trace/vfs/vfs_fchown| uint64|
+/osv/trace/vfs/vfs_fchown_ret| uint64|
 
 ### Community Support
 This repository is one of **many** plugins in the **snap framework**: a powerful telemetry agent framework.
@@ -396,15 +352,23 @@ The full project is at https://github.com/intelsdi-x/snap.
 ### Roadmap
 As we launch this plugin, we do not have any outstanding requirements for the next release. If you have a feature request, please add it as an [issue](https://github.com/intelsdi-x/snap-plugin-collector-osv/issues).
 
+If you have a feature request, please add it as an [issue](https://github.com/intelsdi-x/snap-plugin-collector-osv/issues/new) and/or submit a [pull request](https://github.com/intelsdi-x/snap-plugin-collector-osv/pulls).
+
+## Community Support
+This repository is one of **many** plugins in **snap**, a powerful telemetry framework. See the full project at http://github.com/intelsdi-x/snap To reach out to other users, head to the [main framework](https://github.com/intelsdi-x/snap#community-support)
+
 ## Contributing
-We love contributions! :heart_eyes:
+We love contributions!
 
 There's more than one way to give back, from examples to blogs to code updates. See our recommended process in [CONTRIBUTING.md](CONTRIBUTING.md).
 
-## License and Authors
+## License
+[snap](http://github.com/intelsdi-x/snap), along with this plugin, is an Open Source software released under the Apache 2.0 [License](LICENSE).
+
+## Acknowledgements
 This is Open Source software released under the Apache 2.0 License. Please see the [LICENSE](LICENSE) file for full license details.
 
 * Author: [Marcin Spoczynski](https://github.com/sandlbn/)
 
 ## Thank You
-And **thank you!** Your contribution is incredibly important to us.
+And **thank you!** Your contribution, through code and participation, is incredibly important to us.
