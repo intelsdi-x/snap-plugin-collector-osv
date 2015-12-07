@@ -1,4 +1,5 @@
 [![Build Status](https://api.travis-ci.org/intelsdi-x/snap-plugin-collector-osv.svg)](https://travis-ci.org/intelsdi-x/snap-plugin-collector-osv )
+[![Go Report Card](http://goreportcard.com/badge/intelsdi-x/snap-plugin-collector-osv)](http://goreportcard.com/report/intelsdi-x/snap-plugin-collector-osv)
 # snap collector plugin - osv
 
 1. [Getting Started](#getting-started)

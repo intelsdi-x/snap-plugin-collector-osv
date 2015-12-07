@@ -25,10 +25,10 @@ import (
 	"net/url"
 )
 
-func osvRestGet(swag_url string, path string) ([]byte, error) {
+func osvRestGet(swagURL string, path string) ([]byte, error) {
 
-	call_url := fmt.Sprintf("%s/%s", swag_url, path)
-	resp, err := http.Get(call_url)
+	callURL := fmt.Sprintf("%s/%s", swagURL, path)
+	resp, err := http.Get(callURL)
 	if err != nil {
 		return nil, err
 	}
@@ -40,18 +40,18 @@ func osvRestGet(swag_url string, path string) ([]byte, error) {
 	return body, nil
 }
 
-func osvRestPost(swag_url string, path string) error {
+func osvRestPost(swagURL string, path string) error {
 
-	call_url := fmt.Sprintf("%s/%s", swag_url, path)
-	fmt.Println(call_url)
-	_, err := http.PostForm(call_url, url.Values{})
+	callURL := fmt.Sprintf("%s/%s", swagURL, path)
+	fmt.Println(callURL)
+	_, err := http.PostForm(callURL, url.Values{})
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func osvRestUrl(ip string, port int) string {
+func osvRestURL(ip string, port int) string {
 	url := fmt.Sprintf("http://%s:%d", ip, port)
 	return url
 }

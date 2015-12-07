@@ -20,7 +20,6 @@ package osv
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"strconv"
 	"time"
@@ -28,44 +27,47 @@ import (
 	"github.com/intelsdi-x/snap/control/plugin"
 )
 
+// Counter struct for unmarshalled json stucture
 type Counter struct {
 	Name  string
 	Count uint64
 }
+
+// Counters struct for unmarshalled json stucture
 type Counters struct {
-	Time_ms uint64
-	List    []Counter
+	TimeMs uint64 `json:"time_ms"`
+	List   []Counter
 }
 
 func getCounterMetricTypes() ([]plugin.PluginMetricType, error) {
-	mts := make([]plugin.PluginMetricType, 0)
-	for _, counter := range virtio_counters {
+	var mts []plugin.PluginMetricType
+	for _, counter := range virtioCounters {
 		mts = append(mts, plugin.PluginMetricType{Namespace_: []string{"osv", "trace", "virtio", counter}})
 	}
-	for _, counter := range net_counters {
+	for _, counter := range netCounters {
 		mts = append(mts, plugin.PluginMetricType{Namespace_: []string{"osv", "trace", "net", counter}})
 	}
-	for _, counter := range memory_counters {
+	for _, counter := range memoryCounters {
 		mts = append(mts, plugin.PluginMetricType{Namespace_: []string{"osv", "trace", "memory", counter}})
 	}
-	for _, counter := range callout_counters {
+	for _, counter := range calloutCounters {
 		mts = append(mts, plugin.PluginMetricType{Namespace_: []string{"osv", "trace", "callout", counter}})
 	}
-	for _, counter := range wait_counters {
+	for _, counter := range waitCounters {
 		mts = append(mts, plugin.PluginMetricType{Namespace_: []string{"osv", "trace", "wait", counter}})
 	}
-	for _, counter := range async_counters {
+	for _, counter := range asyncCounters {
 		mts = append(mts, plugin.PluginMetricType{Namespace_: []string{"osv", "trace", "async", counter}})
 	}
-	for _, counter := range vfs_counters {
+	for _, counter := range vfsCounters {
 		mts = append(mts, plugin.PluginMetricType{Namespace_: []string{"osv", "trace", "vfs", counter}})
 	}
 	return mts, nil
 }
 
-func traceStat(ns []string, swag_url string) (*plugin.PluginMetricType, error) {
+func traceStat(ns []string, swagURL string) (*plugin.PluginMetricType, error) {
 	trace := ns[3]
-	metric, err := getTrace(trace, swag_url)
+	metric, err := getTrace(trace, swagURL)
 	if err != nil {
 		return nil, err
 	}
@@ -90,22 +92,20 @@ func parseResult(counters Counters, trace string) (uint64, error) {
 			return counter.Count, nil
 		}
 	}
-	fmt.Println(trace, counters.List)
-	trc_error := fmt.Sprintf("Can't find %s in trace list", trace)
-	return 0, errors.New(trc_error)
+	return 0, fmt.Errorf("Can't find %s in trace list", trace)
 
 }
 
-func osvRestCall(trace string, swag_url string, recovery bool) (uint64, error) {
+func osvRestCall(trace string, swagURL string, recovery bool) (uint64, error) {
 	path := "trace/count"
 	if recovery {
-		recovery_path := fmt.Sprintf("%s/%s?enabled=true", path, trace)
-		err := osvRestPost(swag_url, recovery_path)
+		recoveryPath := fmt.Sprintf("%s/%s?enabled=true", path, trace)
+		err := osvRestPost(swagURL, recoveryPath)
 		if err != nil {
 			return 0, err
 		}
 	}
-	response, err := osvRestGet(swag_url, path)
+	response, err := osvRestGet(swagURL, path)
 	if err != nil {
 		return 0, err
 	}
@@ -122,11 +122,11 @@ func osvRestCall(trace string, swag_url string, recovery bool) (uint64, error) {
 
 }
 
-func getTrace(trace string, swag_url string) (uint64, error) {
+func getTrace(trace string, swagURL string) (uint64, error) {
 
-	metric, err := osvRestCall(trace, swag_url, false)
+	metric, err := osvRestCall(trace, swagURL, false)
 	if err != nil {
-		metric, err = osvRestCall(trace, swag_url, true)
+		metric, err = osvRestCall(trace, swagURL, true)
 		if err != nil {
 			return 0, err
 		}

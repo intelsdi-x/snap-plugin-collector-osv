@@ -18,7 +18,7 @@ limitations under the License.
 
 package osv
 
-var virtio_counters = []string{"virtio_wait_for_queue", "virtio_enable_interrupts", "virtio_disable_interrupts",
+var virtioCounters = []string{"virtio_wait_for_queue", "virtio_enable_interrupts", "virtio_disable_interrupts",
 	"virtio_kicked_event_idx", "virtio_add_buf", "virtio_net_rx_packet", "virtio_net_rx_wake", "virtio_net_fill_rx_ring",
 	"virtio_net_fill_rx_ring_added", "virtio_net_tx_packet", "virtio_net_tx_failed_add_buf", "virtio_net_tx_no_space_calling_gc",
 	"virtio_net_tx_packet_size", "virtio_net_tx_xmit_one_failed_to_post", "virtio_blk_read_config_capacity",
@@ -27,28 +27,28 @@ var virtio_counters = []string{"virtio_wait_for_queue", "virtio_enable_interrupt
 	"virtio_blk_read_config_ro", "virtio_blk_make_request_seg_max", "virtio_blk_make_request_readonly",
 	"virtio_blk_wake", "virtio_blk_strategy", "virtio_blk_req_ok", "virtio_blk_req_unsupp", "virtio_blk_req_err"}
 
-var net_counters = []string{"net_packet_in", "	net_packet_out", "net_packet_handling"}
+var netCounters = []string{"net_packet_in", "	net_packet_out", "net_packet_handling"}
 
-var tcp_counters = []string{"tcp_state", "tcp_input_ack", "tcp_output", "tcp_output_error",
+var tcpCounters = []string{"tcp_state", "tcp_input_ack", "tcp_output", "tcp_output_error",
 	"tcp_output_resched_start", "tcp_output_resched_end", "tcp_output_start", "tcp_output_ret",
 	"tcp_output_just_ret", "tcp_output_cant_take_inp_lock", "tcp_timer_tso_flush",
 	"tcp_timer_tso_flush_ret", "tcp_timer_tso_flush_err"}
 
-var memory_counters = []string{"memory_malloc", "memory_malloc_mempool", "memory_malloc_large", "memory_malloc_page",
+var memoryCounters = []string{"memory_malloc", "memory_malloc_mempool", "memory_malloc_large", "memory_malloc_page",
 	"memory_free", "memory_realloc", "memory_page_alloc", "memory_page_free", "memory_huge_failure", "memory_reclaim",
 	"memory_wait", "memory_mmap", "memory_mmap_err", "memory_mmap_ret", "memory_munmap", "memory_munmap_err", "memory_munmap_ret"}
 
-var callout_counters = []string{"callout_init", "callout_reset", "callout_stop_wait", "callout_stop",
+var calloutCounters = []string{"callout_init", "callout_reset", "callout_stop_wait", "callout_stop",
 	"callout_thread_waiting", "callout_thread_dispatching"}
 
-var wait_counters = []string{"waitqueue_wait", "waitqueue_wake_one", "waitqueue_wake_all"}
+var waitCounters = []string{"waitqueue_wait", "waitqueue_wake_one", "waitqueue_wake_all"}
 
-var async_counters = []string{"async_timer_task_create", "async_timer_task_destroy", "async_timer_task_reschedule",
+var asyncCounters = []string{"async_timer_task_create", "async_timer_task_destroy", "async_timer_task_reschedule",
 	"async_timer_task_cancel", "async_timer_task_shutdown", "async_timer_task_fire", "async_timer_task_misfire",
 	"async_timer_task_insert", "async_timer_task_remove", "async_worker_started", "async_worker_timer_fire",
 	"async_worker_timer_fire_ret", "async_worker_fire", "async_worker_fire_ret"}
 
-var vfs_counters = []string{"vfs_open", "vfs_open_ret", "vfs_open_err", "vfs_close",
+var vfsCounters = []string{"vfs_open", "vfs_open_ret", "vfs_open_err", "vfs_close",
 	"vfs_close_ret", "vfs_close_err", "vfs_mknod", "vfs_mknod_ret", "vfs_mknod_err", "vfs_lseek",
 	"vfs_lseek_ret", "vfs_lseek_err", "vfs_pread", "vfs_pread_ret", "vfs_pread_err", "vfs_pwrite",
 	"vfs_pwrite_ret", "vfs_pwrite_err", "vfs_pwritev", "vfs_pwritev_ret", "vfs_pwritev_err", "vfs_ioctl",
@@ -70,5 +70,5 @@ var vfs_counters = []string{"vfs_open", "vfs_open_ret", "vfs_open_err", "vfs_clo
 	"vfs_chmod", "vfs_chmod_ret", "vfs_chmod_err", "vfs_fchmod", "vfs_fchmod_ret", "vfs_fchown",
 	"vfs_fchown_ret"}
 
-var cpu_metrics = []string{"cputime"}
-var mem_metrics = []string{"free", "total"}
+var cpuMetrics = []string{"cputime"}
+var memMetrics = []string{"free", "total"}

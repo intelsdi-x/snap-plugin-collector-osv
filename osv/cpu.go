@@ -25,8 +25,8 @@ import (
 	"github.com/intelsdi-x/snap/control/plugin"
 )
 
-func cpuStat(ns []string, swag_url string) (*plugin.PluginMetricType, error) {
-	metric, err := getCpuTime(swag_url)
+func cpuStat(ns []string, swagURL string) (*plugin.PluginMetricType, error) {
+	metric, err := getCPUTime(swagURL)
 	if err != nil {
 		return nil, err
 	}
@@ -38,17 +38,17 @@ func cpuStat(ns []string, swag_url string) (*plugin.PluginMetricType, error) {
 
 }
 
-func getCpuMetricTypes() ([]plugin.PluginMetricType, error) {
-	mts := make([]plugin.PluginMetricType, 0)
-	for _, metric_type := range cpu_metrics {
-		mts = append(mts, plugin.PluginMetricType{Namespace_: []string{"osv", "cpu", metric_type}})
+func getCPUMetricTypes() ([]plugin.PluginMetricType, error) {
+	var mts []plugin.PluginMetricType
+	for _, metricType := range cpuMetrics {
+		mts = append(mts, plugin.PluginMetricType{Namespace_: []string{"osv", "cpu", metricType}})
 	}
 	return mts, nil
 }
 
-func getCpuTime(swag_url string) (uint64, error) {
+func getCPUTime(swagURL string) (uint64, error) {
 	path := "trace/count"
-	response, err := osvRestGet(swag_url, path)
+	response, err := osvRestGet(swagURL, path)
 	if err != nil {
 		return 0, err
 	}
@@ -57,5 +57,5 @@ func getCpuTime(swag_url string) (uint64, error) {
 		return 0, err
 	}
 
-	return counters.Time_ms, nil
+	return counters.TimeMs, nil
 }
