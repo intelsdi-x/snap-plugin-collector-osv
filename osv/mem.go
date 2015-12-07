@@ -27,11 +27,11 @@ import (
 	"github.com/intelsdi-x/snap/control/plugin"
 )
 
-func memStat(ns []string, swag_url string) (*plugin.PluginMetricType, error) {
-	mem_type := ns[2]
+func memStat(ns []string, swagURL string) (*plugin.PluginMetricType, error) {
+	memType := ns[2]
 	switch {
 	case regexp.MustCompile(`^/osv/memory/free`).MatchString(joinNamespace(ns)):
-		metric, err := getMemStat(swag_url, mem_type)
+		metric, err := getMemStat(swagURL, memType)
 		if err != nil {
 			return nil, err
 		}
@@ -42,7 +42,7 @@ func memStat(ns []string, swag_url string) (*plugin.PluginMetricType, error) {
 		}, nil
 
 	case regexp.MustCompile(`^/osv/memory/total`).MatchString(joinNamespace(ns)):
-		metric, err := getMemStat(swag_url, mem_type)
+		metric, err := getMemStat(swagURL, memType)
 		if err != nil {
 			return nil, err
 		}
@@ -58,16 +58,16 @@ func memStat(ns []string, swag_url string) (*plugin.PluginMetricType, error) {
 }
 
 func getMemoryMetricTypes() ([]plugin.PluginMetricType, error) {
-	mts := make([]plugin.PluginMetricType, 0)
-	for _, metric_type := range mem_metrics {
-		mts = append(mts, plugin.PluginMetricType{Namespace_: []string{"osv", "memory", metric_type}})
+	var mts []plugin.PluginMetricType
+	for _, metricType := range memMetrics {
+		mts = append(mts, plugin.PluginMetricType{Namespace_: []string{"osv", "memory", metricType}})
 	}
 	return mts, nil
 }
 
-func getMemStat(swag_url string, mem_type string) (uint64, error) {
-	path := fmt.Sprintf("os/memory/%s", mem_type)
-	response, err := osvRestGet(swag_url, path)
+func getMemStat(swagURL string, memType string) (uint64, error) {
+	path := fmt.Sprintf("os/memory/%s", memType)
+	response, err := osvRestGet(swagURL, path)
 	if err != nil {
 		return 0, err
 	}

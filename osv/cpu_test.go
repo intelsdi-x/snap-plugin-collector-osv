@@ -44,7 +44,7 @@ func TestCpuPlugin(t *testing.T) {
 			},
 		)
 
-		cpuTime, err := getCpuTime("http://192.168.192.200:8000")
+		cpuTime, err := getCPUTime("http://192.168.192.200:8000")
 		So(err, ShouldBeNil)
 		So(strconv.FormatUint(cpuTime, 10), ShouldResemble, "144123232")
 
