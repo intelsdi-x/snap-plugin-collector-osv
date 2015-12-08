@@ -346,10 +346,6 @@ Namespace | Data Type | Description
 /osv/trace/vfs/vfs_fchown| uint64|
 /osv/trace/vfs/vfs_fchown_ret| uint64|
 
-### Community Support
-This repository is one of **many** plugins in the **snap framework**: a powerful telemetry agent framework.
-The full project is at https://github.com/intelsdi-x/snap.
-
 ### Roadmap
 As we launch this plugin, we do not have any outstanding requirements for the next release. If you have a feature request, please add it as an [issue](https://github.com/intelsdi-x/snap-plugin-collector-osv/issues).
 
