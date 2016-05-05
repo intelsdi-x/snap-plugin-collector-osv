@@ -21,15 +21,14 @@ package osv
 import (
 	"fmt"
 	"io/ioutil"
+	"net/http"
 	"net/url"
-
-	"github.com/intelsdi-x/snap-plugin-collector-osv/osv/httpmock"
 )
 
 func osvRestGet(swagURL string, path string) ([]byte, error) {
 
 	callURL := fmt.Sprintf("%s/%s", swagURL, path)
-	resp, err := httpmock.Get(callURL)
+	resp, err := http.Get(callURL)
 	if err != nil {
 		return nil, err
 	}
@@ -44,7 +43,7 @@ func osvRestGet(swagURL string, path string) ([]byte, error) {
 func osvRestPost(swagURL string, path string) error {
 
 	callURL := fmt.Sprintf("%s/%s", swagURL, path)
-	_, err := httpmock.PostForm(callURL, url.Values{})
+	_, err := http.PostForm(callURL, url.Values{})
 	if err != nil {
 		return err
 	}
