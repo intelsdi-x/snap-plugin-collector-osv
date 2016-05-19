@@ -26,6 +26,8 @@ import (
 	"strconv"
 	"testing"
 
+	"github.com/intelsdi-x/snap/core"
+
 	"github.com/jarcoal/httpmock"
 
 	. "github.com/smartystreets/goconvey/convey"
@@ -61,10 +63,10 @@ func TestCpuPlugin(t *testing.T) {
 			},
 		)
 
-		ns := []string{"osv", "cpu", "cputime"}
+		ns := core.NewNamespace("intel", "osv", "cpu", "cputime")
 		cpuTime, err := cpuStat(ns, "http://192.168.192.200:8000")
 		So(err, ShouldBeNil)
-		So(cpuTime.Namespace_, ShouldResemble, ns)
+		So(cpuTime.Namespace(), ShouldResemble, ns)
 		So(cpuTime.Data_, ShouldResemble, "144123232")
 
 	})

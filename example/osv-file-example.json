@@ -7,13 +7,13 @@
     "workflow": {
         "collect": {
             "metrics": {
-                "/osv/trace/wait/waitqueue_wake_one": {},
-                "/osv/trace/callout/callout_reset": {},
-                "/osv/cpu/cputime": {},
-                "/osv/memory/free": {}
+                "/intel/osv/trace/wait/waitqueue_wake_one": {},
+                "/intel/osv/trace/callout/callout_reset": {},
+                "/intel/osv/cpu/cputime": {},
+                "/intel/osv/memory/free": {}
             },
             "config": {
-                "/osv": {
+                "/intel/osv": {
                     "swag_ip": $SWAG_IP,
                     "swag_port": 8000
                 }

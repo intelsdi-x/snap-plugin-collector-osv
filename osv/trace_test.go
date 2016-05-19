@@ -26,6 +26,8 @@ import (
 	"strconv"
 	"testing"
 
+	"github.com/intelsdi-x/snap/core"
+
 	"github.com/jarcoal/httpmock"
 
 	. "github.com/smartystreets/goconvey/convey"
@@ -68,10 +70,10 @@ func TestTracePlugin(t *testing.T) {
 			},
 		)
 
-		ns := []string{"osv", "trace", "wait", "waitqueue_wake_one"}
+		ns := core.NewNamespace("intel", "osv", "trace", "wait", "waitqueue_wake_one")
 		memFree, err := traceStat(ns, "http://192.168.192.200:8000")
 		So(err, ShouldBeNil)
-		So(memFree.Namespace_, ShouldResemble, ns)
+		So(memFree.Namespace(), ShouldResemble, ns)
 		So(memFree.Data_, ShouldResemble, "1000")
 
 	})

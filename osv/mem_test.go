@@ -26,6 +26,8 @@ import (
 	"strconv"
 	"testing"
 
+	"github.com/intelsdi-x/snap/core"
+
 	"github.com/jarcoal/httpmock"
 
 	. "github.com/smartystreets/goconvey/convey"
@@ -78,15 +80,15 @@ func TestMemPlugin(t *testing.T) {
 			},
 		)
 
-		ns := []string{"osv", "memory", "free"}
-		ns2 := []string{"osv", "memory", "total"}
+		ns := core.NewNamespace("intel", "osv", "memory", "free")
+		ns2 := core.NewNamespace("intel", "osv", "memory", "total")
 		memFree, err := memStat(ns, "http://192.168.192.200:8000")
 		So(err, ShouldBeNil)
-		So(memFree.Namespace_, ShouldResemble, ns)
+		So(memFree.Namespace(), ShouldResemble, ns)
 		So(memFree.Data_, ShouldResemble, "20000")
 		memTotal, err := memStat(ns2, "http://192.168.192.200:8000")
 		So(err, ShouldBeNil)
-		So(memTotal.Namespace_, ShouldResemble, ns2)
+		So(memTotal.Namespace(), ShouldResemble, ns2)
 		So(memTotal.Data_, ShouldResemble, "10000")
 
 	})

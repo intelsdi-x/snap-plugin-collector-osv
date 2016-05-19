@@ -25,28 +25,29 @@ import (
 	"time"
 
 	"github.com/intelsdi-x/snap/control/plugin"
+	"github.com/intelsdi-x/snap/core"
 )
 
-func memStat(ns []string, swagURL string) (*plugin.PluginMetricType, error) {
-	memType := ns[2]
+func memStat(ns core.Namespace, swagURL string) (*plugin.MetricType, error) {
+	memType := ns.Strings()[3]
 	switch {
-	case regexp.MustCompile(`^/osv/memory/free`).MatchString(joinNamespace(ns)):
+	case regexp.MustCompile(`^/` + Vendor + `/` + Name + `/memory/free`).MatchString(ns.String()):
 		metric, err := getMemStat(swagURL, memType)
 		if err != nil {
 			return nil, err
 		}
-		return &plugin.PluginMetricType{
+		return &plugin.MetricType{
 			Namespace_: ns,
 			Data_:      strconv.FormatUint(metric, 10),
 			Timestamp_: time.Now(),
 		}, nil
 
-	case regexp.MustCompile(`^/osv/memory/total`).MatchString(joinNamespace(ns)):
+	case regexp.MustCompile(`^/` + Vendor + `/` + Name + `/memory/total`).MatchString(ns.String()):
 		metric, err := getMemStat(swagURL, memType)
 		if err != nil {
 			return nil, err
 		}
-		return &plugin.PluginMetricType{
+		return &plugin.MetricType{
 			Namespace_: ns,
 			Data_:      strconv.FormatUint(metric, 10),
 			Timestamp_: time.Now(),
@@ -57,10 +58,10 @@ func memStat(ns []string, swagURL string) (*plugin.PluginMetricType, error) {
 	return nil, fmt.Errorf("Unknown error processing %v", ns)
 }
 
-func getMemoryMetricTypes() ([]plugin.PluginMetricType, error) {
-	var mts []plugin.PluginMetricType
+func getMemoryMetricTypes() ([]plugin.MetricType, error) {
+	var mts []plugin.MetricType
 	for _, metricType := range memMetrics {
-		mts = append(mts, plugin.PluginMetricType{Namespace_: []string{"osv", "memory", metricType}})
+		mts = append(mts, plugin.MetricType{Namespace_: core.NewNamespace(Vendor, Name, "memory", metricType)})
 	}
 	return mts, nil
 }

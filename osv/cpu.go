@@ -23,25 +23,25 @@ import (
 	"time"
 
 	"github.com/intelsdi-x/snap/control/plugin"
+	"github.com/intelsdi-x/snap/core"
 )
 
-func cpuStat(ns []string, swagURL string) (*plugin.PluginMetricType, error) {
+func cpuStat(ns core.Namespace, swagURL string) (*plugin.MetricType, error) {
 	metric, err := getCPUTime(swagURL)
 	if err != nil {
 		return nil, err
 	}
-	return &plugin.PluginMetricType{
+	return &plugin.MetricType{
 		Namespace_: ns,
 		Data_:      strconv.FormatUint(metric, 10),
 		Timestamp_: time.Now(),
 	}, nil
-
 }
 
-func getCPUMetricTypes() ([]plugin.PluginMetricType, error) {
-	var mts []plugin.PluginMetricType
+func getCPUMetricTypes() ([]plugin.MetricType, error) {
+	var mts []plugin.MetricType
 	for _, metricType := range cpuMetrics {
-		mts = append(mts, plugin.PluginMetricType{Namespace_: []string{"osv", "cpu", metricType}})
+		mts = append(mts, plugin.MetricType{Namespace_: core.NewNamespace(Vendor, Name, "cpu", metricType)})
 	}
 	return mts, nil
 }

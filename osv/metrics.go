@@ -27,7 +27,7 @@ var virtioCounters = []string{"virtio_wait_for_queue", "virtio_enable_interrupts
 	"virtio_blk_read_config_ro", "virtio_blk_make_request_seg_max", "virtio_blk_make_request_readonly",
 	"virtio_blk_wake", "virtio_blk_strategy", "virtio_blk_req_ok", "virtio_blk_req_unsupp", "virtio_blk_req_err"}
 
-var netCounters = []string{"net_packet_in", "	net_packet_out", "net_packet_handling"}
+var netCounters = []string{"net_packet_in", "net_packet_out", "net_packet_handling"}
 
 var tcpCounters = []string{"tcp_state", "tcp_input_ack", "tcp_output", "tcp_output_error",
 	"tcp_output_resched_start", "tcp_output_resched_end", "tcp_output_start", "tcp_output_ret",

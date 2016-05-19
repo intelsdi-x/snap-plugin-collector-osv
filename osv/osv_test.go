@@ -28,6 +28,7 @@ import (
 
 	"github.com/intelsdi-x/snap/control/plugin"
 	"github.com/intelsdi-x/snap/control/plugin/cpolicy"
+	"github.com/intelsdi-x/snap/core"
 	"github.com/intelsdi-x/snap/core/cdata"
 	"github.com/intelsdi-x/snap/core/ctypes"
 	"github.com/jarcoal/httpmock"
@@ -61,17 +62,6 @@ func TestLibirtPlugin(t *testing.T) {
 			})
 		})
 	})
-	Convey("Join namespace ", t, func() {
-		namespace1 := []string{"intel", "osv", "one"}
-		namespace2 := []string{}
-		Convey("So namespace should equal intel/osv/one", func() {
-			So("/intel/osv/one", ShouldResemble, joinNamespace(namespace1))
-		})
-		Convey("So namespace should equal slash", func() {
-			So("/", ShouldResemble, joinNamespace(namespace2))
-		})
-
-	})
 	Convey("Get URI ", t, func() {
 		Convey("So should return 10.1.0.1:8000", func() {
 			swagIP := "10.1.0.1"
@@ -83,7 +73,7 @@ func TestLibirtPlugin(t *testing.T) {
 	Convey("Get Metrics ", t, func() {
 		osvCol := NewOsvCollector()
 		cfgNode := cdata.NewNode()
-		var cfg = plugin.PluginConfigType{
+		var cfg = plugin.ConfigType{
 			ConfigDataNode: cfgNode,
 		}
 		Convey("So should return 187 types of metrics", func() {
@@ -93,8 +83,8 @@ func TestLibirtPlugin(t *testing.T) {
 		})
 		Convey("So should check namespace", func() {
 			metrics, err := osvCol.GetMetricTypes(cfg)
-			waitNamespace := joinNamespace(metrics[0].Namespace())
-			wait := regexp.MustCompile(`^/osv/trace/virtio/virtio_wait_for_queue`)
+			waitNamespace := metrics[0].Namespace().String()
+			wait := regexp.MustCompile(`^/intel/osv/trace/virtio/virtio_wait_for_queue`)
 			So(true, ShouldEqual, wait.MatchString(waitNamespace))
 			So(err, ShouldBeNil)
 
@@ -123,7 +113,6 @@ func TestLibirtPlugin(t *testing.T) {
 
 			},
 		)
-		defer httpmock.DeactivateAndReset()
 		httpmock.RegisterResponder("GET", "http://192.168.192.200:8000/trace/count",
 			func(req *http.Request) (*http.Response, error) {
 				resp := httpmock.NewStringResponse(200, `{"time_ms": 144123232, "list": [{"name": "waitqueue_wake_one", "count": 1000}]}`)
@@ -132,8 +121,8 @@ func TestLibirtPlugin(t *testing.T) {
 			},
 		)
 		Convey("So should get memory metrics", func() {
-			metrics := []plugin.PluginMetricType{{
-				Namespace_: []string{"osv", "memory", "free"},
+			metrics := []plugin.MetricType{{
+				Namespace_: core.NewNamespace("intel", "osv", "memory", "free"),
 				Config_:    cfgNode,
 			}}
 			collect, err := osvCol.CollectMetrics(metrics)
@@ -143,8 +132,8 @@ func TestLibirtPlugin(t *testing.T) {
 
 		})
 		Convey("So should get cpu metrics", func() {
-			metrics := []plugin.PluginMetricType{{
-				Namespace_: []string{"osv", "cpu", "cputime"},
+			metrics := []plugin.MetricType{{
+				Namespace_: core.NewNamespace("intel", "osv", "cpu", "cputime"),
 				Config_:    cfgNode,
 			}}
 			collect, err := osvCol.CollectMetrics(metrics)
@@ -155,8 +144,8 @@ func TestLibirtPlugin(t *testing.T) {
 
 		})
 		Convey("So should get trace metrics", func() {
-			metrics := []plugin.PluginMetricType{{
-				Namespace_: []string{"osv", "trace", "wait", "waitqueue_wake_one"},
+			metrics := []plugin.MetricType{{
+				Namespace_: core.NewNamespace("intel", "osv", "trace", "wait", "waitqueue_wake_one"),
 				Config_:    cfgNode,
 			}}
 			collect, err := osvCol.CollectMetrics(metrics)

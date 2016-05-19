@@ -21,18 +21,23 @@ package osv
 
 import (
 	"regexp"
-	"strings"
 
 	"github.com/intelsdi-x/snap/control/plugin"
 	"github.com/intelsdi-x/snap/control/plugin/cpolicy"
+	"github.com/intelsdi-x/snap/core"
 	"github.com/intelsdi-x/snap/core/ctypes"
 )
 
 const (
+	// Parts of returned namespace
+	Vendor = "intel"
+
 	// Name of plugin
 	Name = "osv"
+
 	// Version of plugin
-	Version = 3
+	Version = 4
+
 	// Type of plugin
 	Type = plugin.CollectorPluginType
 )
@@ -52,16 +57,12 @@ func NewOsvCollector() *Osv {
 
 }
 
-func joinNamespace(ns []string) string {
-	return "/" + strings.Join(ns, "/")
-}
-
 // CollectMetrics returns collected metrics
-func (p *Osv) CollectMetrics(mts []plugin.PluginMetricType) ([]plugin.PluginMetricType, error) {
-	cpure := regexp.MustCompile(`^/osv/cpu/cputime`)
-	memre := regexp.MustCompile(`^/osv/memory/.*`)
-	tracere := regexp.MustCompile(`^/osv/trace/.*`)
-	metrics := make([]plugin.PluginMetricType, len(mts))
+func (p *Osv) CollectMetrics(mts []plugin.MetricType) ([]plugin.MetricType, error) {
+	cpure := regexp.MustCompile(`^/` + Vendor + `/` + Name + `/cpu/cputime`)
+	memre := regexp.MustCompile(`^/` + Vendor + `/` + Name + `/memory/.*`)
+	tracere := regexp.MustCompile(`^/` + Vendor + `/` + Name + `/trace/.*`)
+	metrics := make([]plugin.MetricType, len(mts))
 
 	swagIP := mts[0].Config().Table()["swagIP"].(ctypes.ConfigValueStr).Value
 	swagPort := mts[0].Config().Table()["swagPort"].(ctypes.ConfigValueInt).Value
@@ -69,7 +70,7 @@ func (p *Osv) CollectMetrics(mts []plugin.PluginMetricType) ([]plugin.PluginMetr
 
 	for i, p := range mts {
 
-		ns := joinNamespace(p.Namespace())
+		ns := p.Namespace().String()
 		switch {
 		case memre.MatchString(ns):
 			metric, err := memStat(p.Namespace(), swagURL)
@@ -92,8 +93,8 @@ func (p *Osv) CollectMetrics(mts []plugin.PluginMetricType) ([]plugin.PluginMetr
 			metrics[i] = *metric
 
 		}
-		metrics[i].Source_ = swagIP
 
+		metrics[i].Tags_ = map[string]string{core.STD_TAG_PLUGIN_RUNNING_ON: swagIP}
 	}
 	return metrics, nil
 }
@@ -118,8 +119,8 @@ func (p *Osv) GetConfigPolicy() (*cpolicy.ConfigPolicy, error) {
 }
 
 // GetMetricTypes returns metric types that can be collected
-func (p *Osv) GetMetricTypes(cfg plugin.PluginConfigType) ([]plugin.PluginMetricType, error) {
-	var metrics []plugin.PluginMetricType
+func (p *Osv) GetMetricTypes(cfg plugin.ConfigType) ([]plugin.MetricType, error) {
+	var metrics []plugin.MetricType
 	counterMts, err := getCounterMetricTypes()
 	if err != nil {
 		handleErr(err)
