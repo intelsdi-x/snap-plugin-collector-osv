@@ -22,36 +22,24 @@ limitations under the License.
 package osv
 
 import (
-	"net/http"
 	"strconv"
 	"testing"
 
-	"github.com/intelsdi-x/snap/core"
+	"github.com/intelsdi-x/snap-plugin-collector-osv/osv/httpmock"
 
-	"github.com/jarcoal/httpmock"
+	"github.com/intelsdi-x/snap/core"
 
 	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestTracePlugin(t *testing.T) {
+	httpmock.Mock = true
+
 	Convey("getMemstat Should return memory amount value", t, func() {
 
-		httpmock.Activate()
-		defer httpmock.DeactivateAndReset()
-		httpmock.RegisterResponder("GET", "http://192.168.192.200:8000/trace/count",
-			func(req *http.Request) (*http.Response, error) {
-				resp := httpmock.NewStringResponse(200, `{"time_ms": 144123232, "list": [{"name": "waitqueue_wake_one", "count": 1000}]}`)
-				return resp, nil
-
-			},
-		)
-		httpmock.RegisterResponder("POST", "http://192.168.192.200:8000/trace/count/waitqueue_wake_one?enabled=True",
-			func(req *http.Request) (*http.Response, error) {
-				resp := httpmock.NewStringResponse(200, "")
-				return resp, nil
-
-			},
-		)
+		defer httpmock.ResetResponders()
+		httpmock.RegisterResponder("GET", "http://192.168.192.200:8000/trace/count", `{"time_ms": 144123232, "list": [{"name": "waitqueue_wake_one", "count": 1000}]}`, 200)
+		httpmock.RegisterResponder("POST", "http://192.168.192.200:8000/trace/count/waitqueue_wake_one?enabled=True", "", 200)
 
 		trace, err := getTrace("waitqueue_wake_one", "http://192.168.192.200:8000")
 		So(err, ShouldBeNil)
@@ -60,15 +48,8 @@ func TestTracePlugin(t *testing.T) {
 	})
 	Convey("MemStat Should return pluginMetricType Data", t, func() {
 
-		httpmock.Activate()
-		defer httpmock.DeactivateAndReset()
-		httpmock.RegisterResponder("GET", "http://192.168.192.200:8000/trace/count",
-			func(req *http.Request) (*http.Response, error) {
-				resp := httpmock.NewStringResponse(200, `{"time_ms": 144123232, "list": [{"name": "waitqueue_wake_one", "count": 1000}]}`)
-				return resp, nil
-
-			},
-		)
+		defer httpmock.ResetResponders()
+		httpmock.RegisterResponder("GET", "http://192.168.192.200:8000/trace/count", `{"time_ms": 144123232, "list": [{"name": "waitqueue_wake_one", "count": 1000}]}`, 200)
 
 		ns := core.NewNamespace("intel", "osv", "trace", "wait", "waitqueue_wake_one")
 		memFree, err := traceStat(ns, "http://192.168.192.200:8000")
@@ -79,15 +60,8 @@ func TestTracePlugin(t *testing.T) {
 	})
 	Convey("osvCallRest should return nil", t, func() {
 
-		httpmock.Activate()
-		defer httpmock.DeactivateAndReset()
-		httpmock.RegisterResponder("POST", "http://192.168.192.200:8000/trace/count/waitqueue_wake_one?enabled=True",
-			func(req *http.Request) (*http.Response, error) {
-				resp := httpmock.NewStringResponse(200, "")
-				return resp, nil
-
-			},
-		)
+		defer httpmock.ResetResponders()
+		httpmock.RegisterResponder("POST", "http://192.168.192.200:8000/trace/count/waitqueue_wake_one?enabled=True", "", 200)
 
 		resp := osvRestPost("http://192.168.192.200:8000", "trace/count/waitqueue_wake_one?enabled=True")
 		So(resp, ShouldBeNil)

@@ -22,21 +22,23 @@ limitations under the License.
 package osv
 
 import (
-	"net/http"
 	"regexp"
 	"testing"
+
+	"github.com/intelsdi-x/snap-plugin-collector-osv/osv/httpmock"
 
 	"github.com/intelsdi-x/snap/control/plugin"
 	"github.com/intelsdi-x/snap/control/plugin/cpolicy"
 	"github.com/intelsdi-x/snap/core"
 	"github.com/intelsdi-x/snap/core/cdata"
 	"github.com/intelsdi-x/snap/core/ctypes"
-	"github.com/jarcoal/httpmock"
 
 	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestLibirtPlugin(t *testing.T) {
+	httpmock.Mock = true
+
 	Convey("Meta should return metadata for the plugin", t, func() {
 		meta := Meta()
 		So(meta.Name, ShouldResemble, Name)
@@ -97,29 +99,11 @@ func TestLibirtPlugin(t *testing.T) {
 		cfgNode.AddItem("swagIP", ctypes.ConfigValueStr{Value: "192.168.192.200"})
 		cfgNode.AddItem("swagPort", ctypes.ConfigValueInt{Value: 8000})
 
-		httpmock.Activate()
-		defer httpmock.DeactivateAndReset()
-		httpmock.RegisterResponder("GET", "http://192.168.192.200:8000/os/memory/free",
-			func(req *http.Request) (*http.Response, error) {
-				resp := httpmock.NewStringResponse(200, "20000")
-				return resp, nil
-
-			},
-		)
+		defer httpmock.ResetResponders()
+		httpmock.RegisterResponder("GET", "http://192.168.192.200:8000/os/memory/free", "20000", 200)
 		httpmock.RegisterResponder("GET", "http://192.168.192.200:8000/trace/count",
-			func(req *http.Request) (*http.Response, error) {
-				resp := httpmock.NewStringResponse(200, `{"time_ms": 144123232, "list": []}`)
-				return resp, nil
+			`{"time_ms": 144123232, "list": [{"name": "waitqueue_wake_one", "count": 1000}]}`, 200)
 
-			},
-		)
-		httpmock.RegisterResponder("GET", "http://192.168.192.200:8000/trace/count",
-			func(req *http.Request) (*http.Response, error) {
-				resp := httpmock.NewStringResponse(200, `{"time_ms": 144123232, "list": [{"name": "waitqueue_wake_one", "count": 1000}]}`)
-				return resp, nil
-
-			},
-		)
 		Convey("So should get memory metrics", func() {
 			metrics := []plugin.MetricType{{
 				Namespace_: core.NewNamespace("intel", "osv", "memory", "free"),
