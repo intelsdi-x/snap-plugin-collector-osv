@@ -22,34 +22,24 @@ limitations under the License.
 package osv
 
 import (
-	"net/http"
 	"strconv"
 	"testing"
 
-	"github.com/jarcoal/httpmock"
+	"github.com/intelsdi-x/snap-plugin-collector-osv/osv/httpmock"
+
+	"github.com/intelsdi-x/snap/core"
 
 	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestMemPlugin(t *testing.T) {
+	httpmock.Mock = true
+
 	Convey("getMemstat Should return memory amount value", t, func() {
 
-		httpmock.Activate()
-		defer httpmock.DeactivateAndReset()
-		httpmock.RegisterResponder("GET", "http://192.168.192.200:8000/os/memory/free",
-			func(req *http.Request) (*http.Response, error) {
-				resp := httpmock.NewStringResponse(200, "20000")
-				return resp, nil
-
-			},
-		)
-		httpmock.RegisterResponder("GET", "http://192.168.192.200:8000/os/memory/total",
-			func(req *http.Request) (*http.Response, error) {
-				resp := httpmock.NewStringResponse(200, "10000")
-				return resp, nil
-
-			},
-		)
+		defer httpmock.ResetResponders()
+		httpmock.RegisterResponder("GET", "http://192.168.192.200:8000/os/memory/free", "20000", 200)
+		httpmock.RegisterResponder("GET", "http://192.168.192.200:8000/os/memory/total", "10000", 200)
 
 		memFree, err := getMemStat("http://192.168.192.200:8000", "free")
 		So(err, ShouldBeNil)
@@ -61,32 +51,19 @@ func TestMemPlugin(t *testing.T) {
 	})
 	Convey("MemStat Should return pluginMetricType Data", t, func() {
 
-		httpmock.Activate()
-		defer httpmock.DeactivateAndReset()
-		httpmock.RegisterResponder("GET", "http://192.168.192.200:8000/os/memory/free",
-			func(req *http.Request) (*http.Response, error) {
-				resp := httpmock.NewStringResponse(200, "20000")
-				return resp, nil
+		defer httpmock.ResetResponders()
+		httpmock.RegisterResponder("GET", "http://192.168.192.200:8000/os/memory/free", "20000", 200)
+		httpmock.RegisterResponder("GET", "http://192.168.192.200:8000/os/memory/total", "10000", 200)
 
-			},
-		)
-		httpmock.RegisterResponder("GET", "http://192.168.192.200:8000/os/memory/total",
-			func(req *http.Request) (*http.Response, error) {
-				resp := httpmock.NewStringResponse(200, "10000")
-				return resp, nil
-
-			},
-		)
-
-		ns := []string{"osv", "memory", "free"}
-		ns2 := []string{"osv", "memory", "total"}
+		ns := core.NewNamespace("intel", "osv", "memory", "free")
+		ns2 := core.NewNamespace("intel", "osv", "memory", "total")
 		memFree, err := memStat(ns, "http://192.168.192.200:8000")
 		So(err, ShouldBeNil)
-		So(memFree.Namespace_, ShouldResemble, ns)
+		So(memFree.Namespace(), ShouldResemble, ns)
 		So(memFree.Data_, ShouldResemble, "20000")
 		memTotal, err := memStat(ns2, "http://192.168.192.200:8000")
 		So(err, ShouldBeNil)
-		So(memTotal.Namespace_, ShouldResemble, ns2)
+		So(memTotal.Namespace(), ShouldResemble, ns2)
 		So(memTotal.Data_, ShouldResemble, "10000")
 
 	})

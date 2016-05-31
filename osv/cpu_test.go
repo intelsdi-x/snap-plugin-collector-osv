@@ -22,27 +22,23 @@ limitations under the License.
 package osv
 
 import (
-	"net/http"
 	"strconv"
 	"testing"
 
-	"github.com/jarcoal/httpmock"
+	"github.com/intelsdi-x/snap-plugin-collector-osv/osv/httpmock"
+
+	"github.com/intelsdi-x/snap/core"
 
 	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestCpuPlugin(t *testing.T) {
+	httpmock.Mock = true
+
 	Convey("getcpuTime Should return cputime value", t, func() {
 
-		httpmock.Activate()
-		defer httpmock.DeactivateAndReset()
-		httpmock.RegisterResponder("GET", "http://192.168.192.200:8000/trace/count",
-			func(req *http.Request) (*http.Response, error) {
-				resp := httpmock.NewStringResponse(200, `{"time_ms": 144123232, "list": []}`)
-				return resp, nil
-
-			},
-		)
+		defer httpmock.ResetResponders()
+		httpmock.RegisterResponder("GET", "http://192.168.192.200:8000/trace/count", `{"time_ms": 144123232, "list": []}`, 200)
 
 		cpuTime, err := getCPUTime("http://192.168.192.200:8000")
 		So(err, ShouldBeNil)
@@ -51,20 +47,13 @@ func TestCpuPlugin(t *testing.T) {
 	})
 	Convey("CpuStat Should return pluginMetricType Data", t, func() {
 
-		httpmock.Activate()
-		defer httpmock.DeactivateAndReset()
-		httpmock.RegisterResponder("GET", "http://192.168.192.200:8000/trace/count",
-			func(req *http.Request) (*http.Response, error) {
-				resp := httpmock.NewStringResponse(200, `{"time_ms": 144123232, "list": []}`)
-				return resp, nil
+		defer httpmock.ResetResponders()
+		httpmock.RegisterResponder("GET", "http://192.168.192.200:8000/trace/count", `{"time_ms": 144123232, "list": []}`, 200)
 
-			},
-		)
-
-		ns := []string{"osv", "cpu", "cputime"}
+		ns := core.NewNamespace("intel", "osv", "cpu", "cputime")
 		cpuTime, err := cpuStat(ns, "http://192.168.192.200:8000")
 		So(err, ShouldBeNil)
-		So(cpuTime.Namespace_, ShouldResemble, ns)
+		So(cpuTime.Namespace(), ShouldResemble, ns)
 		So(cpuTime.Data_, ShouldResemble, "144123232")
 
 	})

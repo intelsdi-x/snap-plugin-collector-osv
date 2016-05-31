@@ -25,6 +25,7 @@ import (
 	"time"
 
 	"github.com/intelsdi-x/snap/control/plugin"
+	"github.com/intelsdi-x/snap/core"
 )
 
 // Counter struct for unmarshalled json stucture
@@ -39,39 +40,39 @@ type Counters struct {
 	List   []Counter
 }
 
-func getCounterMetricTypes() ([]plugin.PluginMetricType, error) {
-	var mts []plugin.PluginMetricType
+func getCounterMetricTypes() ([]plugin.MetricType, error) {
+	var mts []plugin.MetricType
 	for _, counter := range virtioCounters {
-		mts = append(mts, plugin.PluginMetricType{Namespace_: []string{"osv", "trace", "virtio", counter}})
+		mts = append(mts, plugin.MetricType{Namespace_: core.NewNamespace(Vendor, Name, "trace", "virtio", counter)})
 	}
 	for _, counter := range netCounters {
-		mts = append(mts, plugin.PluginMetricType{Namespace_: []string{"osv", "trace", "net", counter}})
+		mts = append(mts, plugin.MetricType{Namespace_: core.NewNamespace(Vendor, Name, "trace", "net", counter)})
 	}
 	for _, counter := range memoryCounters {
-		mts = append(mts, plugin.PluginMetricType{Namespace_: []string{"osv", "trace", "memory", counter}})
+		mts = append(mts, plugin.MetricType{Namespace_: core.NewNamespace(Vendor, Name, "trace", "memory", counter)})
 	}
 	for _, counter := range calloutCounters {
-		mts = append(mts, plugin.PluginMetricType{Namespace_: []string{"osv", "trace", "callout", counter}})
+		mts = append(mts, plugin.MetricType{Namespace_: core.NewNamespace(Vendor, Name, "trace", "callout", counter)})
 	}
 	for _, counter := range waitCounters {
-		mts = append(mts, plugin.PluginMetricType{Namespace_: []string{"osv", "trace", "wait", counter}})
+		mts = append(mts, plugin.MetricType{Namespace_: core.NewNamespace(Vendor, Name, "trace", "wait", counter)})
 	}
 	for _, counter := range asyncCounters {
-		mts = append(mts, plugin.PluginMetricType{Namespace_: []string{"osv", "trace", "async", counter}})
+		mts = append(mts, plugin.MetricType{Namespace_: core.NewNamespace(Vendor, Name, "trace", "async", counter)})
 	}
 	for _, counter := range vfsCounters {
-		mts = append(mts, plugin.PluginMetricType{Namespace_: []string{"osv", "trace", "vfs", counter}})
+		mts = append(mts, plugin.MetricType{Namespace_: core.NewNamespace(Vendor, Name, "trace", "vfs", counter)})
 	}
 	return mts, nil
 }
 
-func traceStat(ns []string, swagURL string) (*plugin.PluginMetricType, error) {
-	trace := ns[3]
+func traceStat(ns core.Namespace, swagURL string) (*plugin.MetricType, error) {
+	trace := ns.Strings()[4]
 	metric, err := getTrace(trace, swagURL)
 	if err != nil {
 		return nil, err
 	}
-	return &plugin.PluginMetricType{
+	return &plugin.MetricType{
 		Namespace_: ns,
 		Data_:      strconv.FormatUint(metric, 10),
 		Timestamp_: time.Now(),
