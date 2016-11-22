@@ -1,41 +1,32 @@
 {
-    "version": 1,
-    "schedule": {
-        "type": "simple",
-        "interval": "1s"
+    "version":1,
+    "schedule":{
+        "type":"simple",
+        "interval":"1s"
     },
-    "workflow": {
-        "collect": {
-            "metrics": {
-                "/intel/osv/trace/wait/waitqueue_wake_one": {},
-                "/intel/osv/trace/callout/callout_reset": {},
-                "/intel/osv/cpu/cputime": {},
-                "/intel/osv/memory/free": {}
+    "workflow":{
+        "collect":{
+            "metrics":{
+                "/intel/osv/trace/wait/waitqueue_wake_one":{},
+                "/intel/osv/trace/callout/callout_reset":{},
+                "/intel/osv/cpu/cputime":{},
+                "/intel/osv/memory/free":{}
             },
-            "config": {
-                "/intel/osv": {
-                    "swag_ip": $SWAG_IP,
-                    "swag_port": 8000
+            "config":{
+                "/intel/osv":{
+                    "swag_ip":$SWAG_IP,
+                    "swag_port":8000
                 }
             },
-            "process": [
+            "process":null,
+            "publish":[
                 {
-                    "plugin_name": "passthru",
-                    "plugin_version": 1,
-                    "process": null,
-                    "publish": [
-                        {
-                            "plugin_name": "file",
-                            "plugin_version": 3,
-                            "config": {
-                                "file": "/tmp/published"
-                            }
-                        }
-                    ],
-                    "config": null
+                    "plugin_name":"file",
+                    "config":{
+                        "file":"/tmp/published_osv.log"
+                    }
                 }
-            ],
-            "publish": null
+            ]
         }
     }
 }

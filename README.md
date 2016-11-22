@@ -34,96 +34,71 @@ make
 ### Documentation
 
 ### Examples
-Example running osv, passthru processor, and writing data to a file.
+Example of running snap osv collector and writing data to file.
 
-In one terminal window, open the snap daemon :
+Ensure [snap daemon is running](https://github.com/intelsdi-x/snap#running-snap):
+* initd: `sudo service snap-telemetry start`
+* systemd: `sudo systemctl start snap-telemetry`
+* command line: `sudo snapteld -l 1 -t 0 &`
+
+Download and load snap plugins:
 ```
-$ snapd -l 1
+$ wget http://snap.ci.snap-telemetry.io/plugins/snap-plugin-collector-osv/latest/linux/x86_64/snap-plugin-collector-osv
+$ wget http://snap.ci.snap-telemetry.io/plugins/snap-plugin-publisher-file/latest/linux/x86_64/snap-plugin-publisher-file
+$ snaptel plugin load snap-plugin-collector-osv
+$ snaptel plugin load snap-plugin-publisher-file
 ```
 
-In another terminal window:
-Load osv plugin
-```
-$ snapctl plugin load $SNAP_OSV_PLUGIN_DIR/build/rootfs/snap-plugin-collector-osv
-```
 See available metrics for your system
 ```
-$ snapctl metric list
+$ snaptel metric list
 ```
 
 Create a task JSON file:    
 ```json
 {
-    "version": 1,
-    "schedule": {
-        "type": "simple",
-        "interval": "1s"
-    },
-    "workflow": {
-        "collect": {
-            "metrics": {
-                "/intel/osv/trace/wait/waitqueue_wake_one": {},
-                "/intel/osv/trace/callout/callout_reset": {},
-                "/intel/osv/cpu/cputime": {},
-                "/intel/osv/memory/free": {}
-            },
-            "config": {
-                "/intel/osv": {
-                    "swag_ip": "192.168.122.89",
-                    "swag_port": 8000
-                }
-            },
-            "process": [
-                {
-                    "plugin_name": "passthru",
-                    "process": null,
-                    "publish": [
-                        {                         
-                            "plugin_name": "file",
-                            "config": {
-                                "file": "/tmp/published_psutil"
-                            }
-                        }
-                    ],
-                    "config": null
-                }
-            ],
-            "publish": null
-        }
-    }
+   "version":1,
+   "schedule":{
+      "type":"simple",
+      "interval":"1s"
+   },
+   "workflow":{
+      "collect":{
+         "metrics":{
+            "/intel/osv/trace/wait/waitqueue_wake_one":{},
+            "/intel/osv/trace/callout/callout_reset":{},
+            "/intel/osv/cpu/cputime":{},
+            "/intel/osv/memory/free":{}
+         },
+         "config":{
+            "/intel/osv":{
+               "swag_ip":"192.168.122.89",
+               "swag_port":8000
+            }
+         },
+         "process":null,
+         "publish":[
+            {
+               "plugin_name":"file",
+               "config":{
+                  "file":"/tmp/published_osv.log"
+               }
+            }
+         ]
+      }
+   }
 }
 ```
-
-Load passthru plugin for processing:
-```
-$ snapctl plugin load build/rootfs/plugin/snap-processor-passthru
-Plugin loaded
-Name: passthru
-Version: 1
-Type: processor
-Signed: false
-Loaded Time: Fri, 20 Nov 2015 11:44:03 PST
-```
-
-Load file plugin for publishing:
-```
-$ snapctl plugin load build/rootfs/plugin/snap-publisher-file
-Plugin loaded
-Name: file
-Version: 3
-Type: publisher
-Signed: false
-Loaded Time: Fri, 20 Nov 2015 11:41:39 PST
-```
+Alternatively use provided example manifest:
 
 Change ip address and port of osv host in task manifest:
 ```
-vim $SNAP_OSV_PLUGIN_DIR/example/osv-file-example.json
+vim example/osv-file-example.json
 ```
 
 Create task:
 ```
-$ snapctl task create -t $SNAP_OSV_PLUGIN_DIR/example/osv-file-example.json
+$ snaptel task create -t example/osv-file-example.json
 Using task manifest to create task
 Task created
 ID: 02dd7ff4-8106-47e9-8b86-70067cd0a850
@@ -132,6 +107,8 @@ State: Running
 ```
 
 See file output (this is just part of the file):
+
+**NOTE** file publisher now outputs json format; this is output from older version of that plugin
 
 |NAMESPACE|DATA|TIMESTAMP|SOURCE
 |---|---|---|---|
