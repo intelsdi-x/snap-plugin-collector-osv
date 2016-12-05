@@ -72,8 +72,8 @@ Create a task JSON file:
          },
          "config":{
             "/intel/osv":{
-               "swag_ip":"192.168.122.89",
-               "swag_port":8000
+               "swagIP":"192.168.122.89",
+               "swagPort":8000
             }
          },
          "process":null,

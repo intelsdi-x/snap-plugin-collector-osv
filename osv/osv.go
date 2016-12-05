@@ -113,7 +113,7 @@ func (p *Osv) GetConfigPolicy() (*cpolicy.ConfigPolicy, error) {
 	swagPort.Description = "Swagger port / default 8000"
 	config.Add(swagPort)
 
-	cp.Add([]string{""}, config)
+	cp.Add([]string{Vendor, Name}, config)
 	return cp, nil
 
 }
