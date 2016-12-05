@@ -38,7 +38,7 @@ func memStat(ns core.Namespace, swagURL string) (*plugin.MetricType, error) {
 		}
 		return &plugin.MetricType{
 			Namespace_: ns,
-			Data_:      strconv.FormatUint(metric, 10),
+			Data_:      metric,
 			Timestamp_: time.Now(),
 		}, nil
 
@@ -49,7 +49,7 @@ func memStat(ns core.Namespace, swagURL string) (*plugin.MetricType, error) {
 		}
 		return &plugin.MetricType{
 			Namespace_: ns,
-			Data_:      strconv.FormatUint(metric, 10),
+			Data_:      metric,
 			Timestamp_: time.Now(),
 		}, nil
 

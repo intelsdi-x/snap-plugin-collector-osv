@@ -21,7 +21,6 @@ package osv
 import (
 	"encoding/json"
 	"fmt"
-	"strconv"
 	"time"
 
 	"github.com/intelsdi-x/snap/control/plugin"
@@ -74,7 +73,7 @@ func traceStat(ns core.Namespace, swagURL string) (*plugin.MetricType, error) {
 	}
 	return &plugin.MetricType{
 		Namespace_: ns,
-		Data_:      strconv.FormatUint(metric, 10),
+		Data_:      metric,
 		Timestamp_: time.Now(),
 	}, nil
 }
