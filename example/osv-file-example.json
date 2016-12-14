@@ -14,8 +14,8 @@
             },
             "config":{
                 "/intel/osv":{
-                    "swag_ip":$SWAG_IP,
-                    "swag_port":8000
+                    "swagIP":$SWAG_IP,
+                    "swagPort":8000
                 }
             },
             "process":null,

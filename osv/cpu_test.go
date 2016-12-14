@@ -22,7 +22,6 @@ limitations under the License.
 package osv
 
 import (
-	"strconv"
 	"testing"
 
 	"github.com/intelsdi-x/snap-plugin-collector-osv/osv/httpmock"
@@ -42,7 +41,7 @@ func TestCpuPlugin(t *testing.T) {
 
 		cpuTime, err := getCPUTime("http://192.168.192.200:8000")
 		So(err, ShouldBeNil)
-		So(strconv.FormatUint(cpuTime, 10), ShouldResemble, "144123232")
+		So(cpuTime, ShouldEqual, 144123232)
 
 	})
 	Convey("CpuStat Should return pluginMetricType Data", t, func() {
@@ -54,7 +53,7 @@ func TestCpuPlugin(t *testing.T) {
 		cpuTime, err := cpuStat(ns, "http://192.168.192.200:8000")
 		So(err, ShouldBeNil)
 		So(cpuTime.Namespace(), ShouldResemble, ns)
-		So(cpuTime.Data_, ShouldResemble, "144123232")
+		So(cpuTime.Data_, ShouldEqual, 144123232)
 
 	})
 }

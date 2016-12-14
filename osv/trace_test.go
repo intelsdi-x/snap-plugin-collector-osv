@@ -22,7 +22,6 @@ limitations under the License.
 package osv
 
 import (
-	"strconv"
 	"testing"
 
 	"github.com/intelsdi-x/snap-plugin-collector-osv/osv/httpmock"
@@ -43,7 +42,7 @@ func TestTracePlugin(t *testing.T) {
 
 		trace, err := getTrace("waitqueue_wake_one", "http://192.168.192.200:8000")
 		So(err, ShouldBeNil)
-		So(strconv.FormatUint(trace, 10), ShouldResemble, "1000")
+		So(trace, ShouldEqual, 1000)
 
 	})
 	Convey("MemStat Should return pluginMetricType Data", t, func() {
@@ -55,7 +54,7 @@ func TestTracePlugin(t *testing.T) {
 		memFree, err := traceStat(ns, "http://192.168.192.200:8000")
 		So(err, ShouldBeNil)
 		So(memFree.Namespace(), ShouldResemble, ns)
-		So(memFree.Data_, ShouldResemble, "1000")
+		So(memFree.Data_, ShouldEqual, 1000)
 
 	})
 	Convey("osvCallRest should return nil", t, func() {

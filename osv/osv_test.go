@@ -123,8 +123,8 @@ func TestLibirtPlugin(t *testing.T) {
 			collect, err := osvCol.CollectMetrics(metrics)
 			So(err, ShouldBeNil)
 			So(collect[0].Data_, ShouldNotBeNil)
-			So(collect[0].Data_, ShouldResemble, "144123232")
-			So(len(collect), ShouldResemble, 1)
+			So(collect[0].Data_, ShouldEqual, 144123232)
+			So(len(collect), ShouldEqual, 1)
 
 		})
 		Convey("So should get trace metrics", func() {
@@ -135,8 +135,8 @@ func TestLibirtPlugin(t *testing.T) {
 			collect, err := osvCol.CollectMetrics(metrics)
 			So(err, ShouldBeNil)
 			So(collect[0].Data_, ShouldNotBeNil)
-			So(collect[0].Data_, ShouldResemble, "1000")
-			So(len(collect), ShouldResemble, 1)
+			So(collect[0].Data_, ShouldEqual, 1000)
+			So(len(collect), ShouldEqual, 1)
 
 		})
 
