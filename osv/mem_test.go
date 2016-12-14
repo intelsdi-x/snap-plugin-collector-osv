@@ -22,7 +22,6 @@ limitations under the License.
 package osv
 
 import (
-	"strconv"
 	"testing"
 
 	"github.com/intelsdi-x/snap-plugin-collector-osv/osv/httpmock"
@@ -43,10 +42,10 @@ func TestMemPlugin(t *testing.T) {
 
 		memFree, err := getMemStat("http://192.168.192.200:8000", "free")
 		So(err, ShouldBeNil)
-		So(strconv.FormatUint(memFree, 10), ShouldResemble, "20000")
+		So(memFree, ShouldEqual, 20000)
 		memTotal, err := getMemStat("http://192.168.192.200:8000", "total")
 		So(err, ShouldBeNil)
-		So(strconv.FormatUint(memTotal, 10), ShouldResemble, "10000")
+		So(memTotal, ShouldEqual, 10000)
 
 	})
 	Convey("MemStat Should return pluginMetricType Data", t, func() {
@@ -60,11 +59,11 @@ func TestMemPlugin(t *testing.T) {
 		memFree, err := memStat(ns, "http://192.168.192.200:8000")
 		So(err, ShouldBeNil)
 		So(memFree.Namespace(), ShouldResemble, ns)
-		So(memFree.Data_, ShouldResemble, "20000")
+		So(memFree.Data_, ShouldEqual, 20000)
 		memTotal, err := memStat(ns2, "http://192.168.192.200:8000")
 		So(err, ShouldBeNil)
 		So(memTotal.Namespace(), ShouldResemble, ns2)
-		So(memTotal.Data_, ShouldResemble, "10000")
+		So(memTotal.Data_, ShouldEqual, 10000)
 
 	})
 }
